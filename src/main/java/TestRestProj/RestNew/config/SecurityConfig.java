@@ -37,7 +37,14 @@ public class SecurityConfig {
                 .passwordParameter("user-password")
                 .defaultSuccessUrl("/home")
                 .failureUrl("/login?error");
+
+        http.logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login");
+        http.csrf().disable();
+
        return http.build();
+
 
     }
 }
