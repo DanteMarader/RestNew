@@ -38,5 +38,16 @@ public class HomeController {
     public String openLogin(){
        return "login";
     }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value ="/profile")
+    public String openProfile(){
+        return "profile";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping(value ="/adminPanel")
+    public String openAdminPanel(){
+        return "admin-panel";
+    }
 
 }
