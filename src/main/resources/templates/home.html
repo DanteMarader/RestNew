@@ -1,0 +1,172 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html">
+
+<div class="container mt-3 " layout:fragment="homePage">
+
+    <div class="row target">
+
+    </div>
+
+    <script>
+        loadContent();
+
+        function loadContent() {
+            const request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (this.readyState === request.DONE && this.status == 200) {
+                    let animals = JSON.parse(request.responseText);
+                    const target = document.querySelector('.target');
+                    let maxWidth = 0;
+                    let maxHeight = 0;
+
+                    for (let i = 0; i < animals.length; i++) {
+                        let htmlCode = "";
+
+                        htmlCode += "<div class='row'>";
+                        htmlCode += "<div class='card my-2 shadow' style='border-radius: 10px; background-color: #d4e7e7'>";
+                        htmlCode += "<div class='card-body row align-content-between'>";
+                        htmlCode += "<div>";
+                        htmlCode += "<h5 class='card-title' style='text-align: center'>" + animals[i].name + "</h5>";
+                        htmlCode += "<p class='card-text' style='text-align: center'>" + 'Age: ' + animals[i].age + "</p>";
+                        htmlCode += "<p class='card-text' style='text-align: center'>" + 'Weight: ' + animals[i].weight + "</p>";
+                        htmlCode += "<p class='card-text' style='text-align: center'>" + 'Category: ' + "</p>";
+
+
+                        for (let j = 0; j < animals[i].categories.length; j++) {
+                            htmlCode += "<p class='card-text' style='text-align: center'>" + animals[i].categories[j].name + "</p>";
+                        }
+
+                        htmlCode += "</div>";
+                        htmlCode += "<div style='text-align: center'>";
+                        htmlCode += "<a class='btn btn-warning' href='/details/" + animals[i].id + "'>DETAILS</a>";
+                        htmlCode += "</div>";
+                        htmlCode += "</div>";
+                        htmlCode += "</div>";
+                        htmlCode += "</div>";
+
+                        let newDiv = document.createElement('div');
+                        newDiv.classList.add('col-4');
+                        newDiv.innerHTML = htmlCode;
+                        target.append(newDiv);
+
+                        let cardWidth = 415;
+                        let cardHeight = newDiv.offsetHeight;
+                        maxWidth = Math.max(maxWidth, cardWidth);
+                        maxHeight = Math.max(maxHeight, cardHeight);
+                    }
+
+                    let cardDivs = document.querySelectorAll('.card');
+                    for (let i = 0; i < cardDivs.length; i++) {
+                        cardDivs[i].style.width = maxWidth + "px";
+                        cardDivs[i].style.height = maxHeight + "px";
+                    }
+                }
+            };
+
+            request.open("GET", "/animal");
+            request.send();
+        }
+    </script>
+
+
+    <!--modal Add Animal-->
+
+    <div class="modal fade" id="AddAnimalModal"
+         data-bs-backdrop="static"
+         data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="staticBackdropLabel1"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel1"> Add Animal </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <label>NAME-ANIMAL : </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control" id="animalName" required
+                                   placeholder="Animal Name">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <label>AGE-ANIMAL : </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <input class="form-control" id="animalAge" required
+                                   placeholder="Animal Age">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <label>WEIGHT-ANIMAL : </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control" id="animalWeight" required
+                                   placeholder="Animal Weight">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <label>CATEGORY-ANIMAL : </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group" th:each="category : ${categories}">
+                               <input type="checkbox" class="form-check-input" id="animalCategory"  th:value="${category.getId()}">
+                                    <label class="form-check-label" for="animalCategory" th:text="${category.getName()}">
+
+                                     </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success" onclick="addPost()">Add Animal</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function addPost(){
+            const request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (this.readyState === request.DONE && this.status == 200) {
+                    window.location.href="/home";
+                }
+            };
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            let categories = [];
+            checkboxes.forEach(function(checkbox) {
+                let category = {"id" : checkbox.value}
+                categories.push(category);
+            });
+            let requestBody = {
+                "name" : animalName.value,
+                "age" : animalAge.value,
+                "weight" : animalWeight.value,
+                "categories" : categories
+            };
+            request.open("POST", "/animal");
+            request.setRequestHeader("Content-Type","application/json;charset=UTF-8")
+            request.send(JSON.stringify(requestBody));
+        }
+
+    </script>
+    <!--modal end-->
+</div>
+
+</html>

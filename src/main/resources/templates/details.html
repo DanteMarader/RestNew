@@ -1,0 +1,89 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html">
+
+<div class="container mt-3" layout:fragment="detailPage">
+
+    <div class="row target">
+
+    </div>
+
+    <div class="row col-6 mx-auto">
+
+        <select class="form-control" id="animalCategoriesId">
+            <option th:each="category : ${categories}" th:text="${category.getName()}" th:value="${category.getId()}"></option>
+        </select>
+
+        <div style="text-align: center" class="mt-3">
+            <button class="btn btn-warning" onclick="updatePut()">UPDATE</button>
+            <button class="btn btn-danger ms-2" onclick="deleteAnimal()" >DELETE</button>
+        </div>
+
+    </div>
+
+    <input type="hidden" th:value="${animal.getId()}" id="animalId">
+    <script>
+        loadContent();
+
+        function loadContent() {
+            const request = new XMLHttpRequest();
+            request.onreadystatechange = function () {
+                if (this.readyState === request.DONE && this.status == 200) {
+                    let animal = JSON.parse(request.responseText);
+                    let htmlCode = "";
+                    const target = document.querySelector('.target');
+                    htmlCode = htmlCode + "<div class='row'>";
+                    htmlCode = htmlCode + "<div class='col-6 mx-auto'>";
+                    htmlCode = htmlCode + `<input type="hidden" class='form-control' value='${animal.id}' id="an">`;
+                    htmlCode += "<label class='mb-2'> Animal Name : </label>";
+                    htmlCode += `<input class='form-control' value='${animal.name}' id="animalName">`;
+                    htmlCode += "<label class='mb-2'> Animal Age : </label>";
+                    htmlCode += `<input class='form-control' value='${animal.age}' id="animalAge">`;
+                    htmlCode += "<label class='mb-2'> Animal Weight : </label>";
+                    htmlCode += `<input class='form-control' value='${animal.weight}' id="animalWeight">`;
+                    htmlCode += "<label class='mb-2'> Animal Category : </label>";
+                    htmlCode = htmlCode + "</div>";
+                    htmlCode = htmlCode + "</div>";
+                    let newDiv = document.createElement('div');
+                    newDiv.innerHTML = htmlCode;
+                    target.append(newDiv);
+                }
+            };
+            request.open("GET", "/animal/" + animalId.value);
+            request.send();
+        }
+
+        function updatePut() {
+            const request = new XMLHttpRequest();
+            request.onreadystatechange = function () {
+                if (this.readyState === request.DONE && this.status == 200) {
+                    window.location.href = "/home";
+                }
+            };
+            let requestBody = {
+                "id": an.value,
+                "name": animalName.value,
+                "age": animalAge.value,
+                "weight": animalWeight.value,
+                "categories": [{"id" : animalCategoriesId.value}]
+            };
+
+            request.open("PUT", "/animal");
+            request.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
+            request.send(JSON.stringify(requestBody));
+        }
+
+        function deleteAnimal() {
+            const request = new XMLHttpRequest();
+            request.onreadystatechange = function () {
+                if (this.readyState === request.DONE && this.status == 200) {
+                    window.location.href = "/home";
+                }
+            };
+
+            request.open("DELETE", "/animal/" + an.value);
+            request.send();
+        }
+
+    </script>
+</div>
+
+</html>

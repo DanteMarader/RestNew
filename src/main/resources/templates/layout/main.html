@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+    <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+        <link rel="stylesheet" type="text/css" th:href="@{'/css/bootstrap.css'}">
+        <script type="text/javascript" th:src="@{'/js/bootstrap.bundle.js'}"></script>
+    </head>
+
+    <body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav style="background: #0d325d"
+                        class="navbar navbar-expand-lg  navbar-dark mt-3 shadow-lg rounded">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="/home">
+                            <strong>Animal</strong>
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <button type="button" class="nav-link active" data-bs-toggle="modal"
+                                            data-bs-target="#AddAnimalModal">
+                                        + Add Animal
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+        <div class="container">
+
+            <div class="row" layout:fragment="homePage">
+
+            </div>
+            <div class="row" layout:fragment="detailPage">
+
+            </div>
+            <div class="row" layout:fragment="LoginPage">
+
+            </div>
+
+        </div>
+
+    </body>
+</html>
