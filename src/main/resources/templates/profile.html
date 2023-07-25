@@ -1,0 +1,17 @@
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <div class="container mt-3 mb-2" layout:fragment="profilePage">
+        <div class="row">
+            <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1339aa30-63ec-4ab6-9c31-0d9f69f44b23/df3ic0p-67327a2f-f1a2-4d65-93fb-6aaf6116b290.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzEzMzlhYTMwLTYzZWMtNGFiNi05YzMxLTBkOWY2OWY0NGIyM1wvZGYzaWMwcC02NzMyN2EyZi1mMWEyLTRkNjUtOTNmYi02YWFmNjExNmIyOTAuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.KKO_zO1OSOpTgWpDOAoRiXLg7mAa7C4oY0J27HV1vMM"style="height: 200px; width: 200px">
+            <div class="row mt-1">
+                <h4><a href="#">PREFERENCES</a></h4>
+                <h4><a href="#">CHANGE PASSWORD</a></h4>
+                <h4><a href="#">STATISTIC</a></h4>
+                <h4 sec:authorize="hasAnyRole('ROLE_ADMIN')"><a th:href="@{'/adminPanel'}">ADMIN PANEL</a></h4>
+                <form th:action="@{'/logout'}" method="post">
+                    <button class="btn btn-danger mt-2">LOGOUT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</html>
