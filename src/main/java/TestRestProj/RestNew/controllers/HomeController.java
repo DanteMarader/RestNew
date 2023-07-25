@@ -44,4 +44,10 @@ public class HomeController {
         return "profile";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping(value ="/adminPanel")
+    public String openAdminPanel(){
+        return "admin-panel";
+    }
+
 }
